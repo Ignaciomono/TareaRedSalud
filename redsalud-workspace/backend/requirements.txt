@@ -1,0 +1,5 @@
+Django==4.2
+psycopg2==2.9.6
+djangorestframework==3.14.0
+django-cors-headers==3.14.0
+dotenv==0.19.2

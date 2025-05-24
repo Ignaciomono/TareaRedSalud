@@ -1,0 +1,23 @@
+{
+  "name": "redsalud-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for the RedSalud project using Vue.js 3",
+  "author": "Tu Nombre",
+  "license": "MIT",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "vue": "^3.2.0",
+    "vue-router": "^4.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^5.0.0",
+    "@vue/cli-service": "^5.0.0",
+    "@vue/compiler-sfc": "^3.2.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^7.20.0"
+  }
+}
