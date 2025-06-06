@@ -1,7 +1,29 @@
+# Entornos virtuales
 venv/
+.venv/
+enviroment/
+
+# Archivos de Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+
+# Base de datos local
 db.sqlite3
+
+# Variables de entorno y configuraciones sensibles
 .env
+config.env
+
+# Archivos de migraciones (opcional, si no quieres versionarlas)
+# */migrations/*.py
+# */migrations/*.pyc
+
+# Archivos de logs
+*.log
+
+# Archivos de VSCode y sistema operativo
+.vscode/
+.DS_Store
+Thumbs.db

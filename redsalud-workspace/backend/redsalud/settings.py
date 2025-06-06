@@ -1,11 +1,18 @@
+import os
+from dotenv import load_dotenv
+
+# Carga el archivo .env desde la carpeta backend
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv(dotenv_path)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Redsalud',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -13,7 +20,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 DEBUG = True
 
-SECRET_KEY = 'django-insecure-1234567890abcdefghijklmnopqrstuv'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
