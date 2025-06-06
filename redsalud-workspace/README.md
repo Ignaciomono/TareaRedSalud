@@ -27,6 +27,7 @@ redsalud-workspace/
 - **Django REST Framework**
 - **Base de datos PostgreSQL**
 - Endpoints CRUD para el modelo `DatosMedicos`.
+- Uso de variables de entorno con `python-dotenv`.
 
 ### Frontend
 
@@ -39,14 +40,29 @@ redsalud-workspace/
 
 ### Backend
 
-```sh
-cd backend
-python -m venv venv
-venv\Scripts\activate  # En Windows
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
-```
+1. Crea y activa un entorno virtual (puede llamarse `venv`, `.venv`, `enviroment`, etc.):
+   ```sh
+   python -m venv enviroment
+   enviroment\Scripts\activate
+   ```
+2. Instala las dependencias:
+   ```sh
+   pip install -r requirements.txt
+   ```
+3. Crea un archivo `.env` en la carpeta `backend/` con el siguiente contenido (ajusta tus datos):
+   ```
+   DB_NAME=Redsalud
+   DB_USER=postgres
+   DB_PASSWORD=tu_contraseña
+   DB_HOST=localhost
+   DB_PORT=5432
+   SECRET_KEY=django-insecure-1234567890abcdefghijklmnopqrstuv
+   ```
+4. Aplica migraciones y ejecuta el servidor:
+   ```sh
+   python manage.py migrate
+   python manage.py runserver
+   ```
 
 ### Frontend
 
@@ -57,6 +73,11 @@ npm run serve
 ```
 
 Abre [http://localhost:8080](http://localhost:8080) en tu navegador.
+
+## Notas importantes
+
+- **No subas el archivo `.env` ni archivos de entorno del frontend al repositorio** (ya están en `.gitignore`).
+- Si necesitas cambiar la URL del backend en el frontend, usa un archivo `.env` o `.env.local` en la carpeta `frontend/` y accede a la variable con `process.env.VUE_APP_API_URL`.
 
 ## Contribuciones
 
