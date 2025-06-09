@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="datos-medicos-scroll">
     <h1>Datos Médicos</h1>
     <table border="1">
       <thead>
@@ -33,3 +33,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.datos-medicos-scroll {
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  box-sizing: border-box;
+  padding: 2rem;
+  background: #f8f8f8;
+}
+table {
+  min-width: 600px;
+  background: #fff;
+}
+</style>

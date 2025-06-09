@@ -1,18 +1,14 @@
 <!-- VistaCoordinadorEspecialistas.vue -->
 <template>
   <div class="coordinador-especialistas-root">
-    <!-- Barra lateral -->
-    <div class="sidebar"></div>
-    <!-- Foto de perfil (Ellipse) -->
-    <div class="profile-pic"></div>
-    <!-- Nombre coordinador -->
-    <div class="coordinador-nombre">Coordinador RedSalud<br />Rodolfo Estevia</div>
-    <!-- Botón Especialistas -->
-    <div class="sidebar-btn-especialistas">Especialistas</div>
-    <!-- Botón Boxes -->
-    <div class="sidebar-btn-boxes" @click="goToBoxes">Boxes</div>
-    <!-- Botón Salir -->
-    <div class="sidebar-btn-salir" @click="salir">Salir</div>
+    <div class="sidebar">
+      <div class="profile-pic"></div>
+      <div class="coordinador-nombre">Coordinador RedSalud<br />Rodolfo Estevia</div>
+      <div class="sidebar-btn sidebar-btn-especialistas">Especialistas</div>
+      <div class="sidebar-btn sidebar-btn-boxes" @click="goToBoxes">Boxes</div>
+      <div class="sidebar-btn sidebar-btn-salir" @click="salir">Salir</div>
+    </div>
+    <!-- Aquí puedes agregar el contenido principal a la derecha del sidebar -->
   </div>
 </template>
 
@@ -24,7 +20,6 @@ export default {
       this.$router.push('/');
     },
     goToBoxes() {
-      // Lógica para navegar a la sección de Boxes
       this.$router.push('/boxes');
     }
   }
@@ -33,110 +28,85 @@ export default {
 
 <style scoped>
 .coordinador-especialistas-root {
-  position: relative;
-  width: 1440px;
-  height: 1024px;
+  width: 100vw;
+  height: 100vh;
   background: rgba(0, 153, 153, 0.53);
   font-family: 'Roboto', sans-serif;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* Sidebar */
 .sidebar {
-  position: absolute;
   width: 250px;
-  height: 1024px;
-  left: 0;
-  top: 0;
+  height: 100vh;
   background: #D9D9D9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Quita el padding-top para que la imagen quede arriba */
+  padding-top: 0;
+  box-sizing: border-box;
+  position: relative;
 }
 
 /* Foto de perfil (Ellipse) */
 .profile-pic {
-  position: absolute;
   width: 200px;
   height: 200px;
-  left: 25px;
-  top: 38px;
   background: #D9D9D9 url('https://via.placeholder.com/200') center/cover no-repeat;
   border-radius: 50%;
   border: 2px solid #bbb;
+  margin-top: 38px;
+  margin-bottom: 10px;
 }
 
 /* Nombre coordinador */
 .coordinador-nombre {
-  position: absolute;
   width: 160px;
-  height: 38px;
-  left: 45px;
-  top: 244px;
+  margin: 10px 0 30px 0;
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
   display: flex;
-  align-items: center;
-  text-align: center;
-  color: #000;
   flex-direction: column;
-}
-
-/* Botón Especialistas */
-.sidebar-btn-especialistas {
-  position: absolute;
-  width: 270px;
-  height: 76px;
-  left: 0;
-  top: 342px;
-  background: #75C2A6;
-  border-radius: 0px 12px 12px 0px;
-  font-weight: 500;
-  font-size: 36px;
-  line-height: 42px;
-  display: flex;
   align-items: center;
   text-align: center;
   color: #000;
-  padding-left: 45px;
 }
 
-/* Botón Boxes */
-.sidebar-btn-boxes {
-  position: absolute;
-  width: 249px;
-  height: 76px;
-  left: 1px;
-  top: 436px;
-  background: #75C2A6;
-  border-radius: 0px 12px 12px 0px;
+/* Botones sidebar */
+.sidebar-btn {
+  width: 90%;
+  height: 56px;
+  margin: 10px 0;
+  border-radius: 12px;
   font-weight: 500;
-  font-size: 36px;
+  font-size: 28px;
   line-height: 42px;
   display: flex;
   align-items: center;
-  text-align: center;
-  color: #000;
-  padding-left: 45px;
-}
-
-/* Botón Salir */
-.sidebar-btn-salir {
-  position: absolute;
-  width: 249px;
-  height: 76px;
-  left: 1px;
-  top: 530px;
-  background: #ff6666;
-  border-radius: 0px 12px 12px 0px;
-  font-weight: 500;
-  font-size: 36px;
-  line-height: 42px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #fff;
-  padding-left: 45px;
+  justify-content: center;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
+  user-select: none;
 }
+
+.sidebar-btn-especialistas,
+.sidebar-btn-boxes {
+  background: #75C2A6;
+  color: #000;
+}
+
+.sidebar-btn-salir {
+  background: #ff6666;
+  color: #fff;
+  margin-top: auto;
+  margin-bottom: 30px;
+}
+
 .sidebar-btn-salir:hover {
   background: #ff3333;
 }

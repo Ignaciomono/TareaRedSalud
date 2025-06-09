@@ -49,214 +49,155 @@ export default {
 </script>
 
 <style scoped>
-.login-root {
-  position: relative;
-  width: 1440px;
-  height: 1024px;
-  background: rgba(0, 153, 153, 0.53);
-  font-family: 'Roboto', sans-serif;
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Tarjeta central */
+#app {
+  min-height: 100vh;
+  min-width: 100vw;
+  width: 100vw;
+  height: 100vh;
+}
+
+.login-root {
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .login-card {
-  position: absolute;
-  width: 696px;
-  height: 696px;
-  left: 372px;
-  top: 164px;
+  width: 90vw;
+  max-width: 500px;
+  min-width: 280px;
   background: #D9D9D9;
   backdrop-filter: blur(2px);
   border-radius: 10px;
-}
-
-/* Título */
-.login-title {
-  position: absolute;
-  width: 294px;
-  height: 56px;
-  left: 573px;
-  top: 231px;
-  font-weight: 700;
-  font-size: 48px;
-  line-height: 56px;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  color: #85CCCC;
-  transform: translate(-372px, -164px);
-}
-
-/* Usuario */
-.login-label.usuario-label {
-  position: absolute;
-  width: 123px;
-  height: 39px;
-  left: 586px;
-  top: 372px;
-  font-weight: 400;
-  font-size: 36px;
-  line-height: 42px;
-  color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  text-align: center;
-  transform: translate(-372px, -164px);
-}
-.login-input.usuario-input {
-  position: absolute;
-  width: 216px;
-  height: 39px;
-  left: 504px;
-  top: 372px;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 36px;
-  color: #000;
-  transform: translate(-372px, -164px);
-}
-
-/* Contraseña */
-.login-label.password-label {
-  position: absolute;
-  width: 184px;
-  height: 39px;
-  left: 586px;
-  top: 480px;
-  font-weight: 400;
-  font-size: 36px;
-  line-height: 42px;
-  color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  text-align: center;
-  transform: translate(-372px, -164px);
-}
-.login-input.password-input {
-  position: absolute;
-  width: 216px;
-  height: 39px;
-  left: 504px;
-  top: 480px;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 36px;
-  color: #000;
-  transform: translate(-372px, -164px);
-}
-
-/* Líneas */
-.login-line {
-  position: absolute;
-  height: 0px;
-  border: 1px solid #000000;
-}
-.line1 {
-  width: 216px;
-  left: 504px;
-  top: 423px;
-  transform: translate(-372px, -164px);
-}
-.line2 {
-  width: 216px;
-  left: 720px;
-  top: 423px;
-  transform: translate(-372px, -164px);
-}
-.line3 {
-  width: 216px;
-  left: 504px;
-  top: 531px;
-  transform: translate(-372px, -164px);
-}
-.line4 {
-  width: 216px;
-  left: 720px;
-  top: 531px;
-  transform: translate(-372px, -164px);
-}
-
-/* Recordarme */
-.recordarme {
-  position: absolute;
-  width: 111px;
-  height: 41px;
-  left: 544px;
-  top: 543px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  text-align: center;
-  transform: translate(-372px, -164px);
-}
-
-/* Olvide mi contraseña */
-.olvide {
+  padding: 2.5rem 2rem 3.5rem 2rem;
   box-sizing: border-box;
-  position: absolute;
-  width: 153px;
-  height: 41px;
-  left: 783px;
-  top: 543px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.login-title {
+  font-weight: 700;
+  font-size: 2.2rem;
+  line-height: 2.5rem;
+  color: #85CCCC;
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.login-label {
+  font-size: 1.5rem;
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 0.5rem;
+  width: 100%;
+  text-align: left;
+}
+
+.login-input {
+  width: 100%;
+  font-size: 1.3rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #000;
+  outline: none;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.login-line {
+  display: none;
+}
+
+.recordarme {
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 1rem;
+  width: 100%;
+  text-align: left;
+}
+
+.olvide {
+  font-size: 1rem;
   color: #99CC00;
   border: 1px solid rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
   border-radius: 5px;
-  transform: translate(-372px, -164px);
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 1.5rem;
+  margin-left: auto;
+  text-align: right;
+  display: inline-block;
 }
 
-/* Botón LOGIN */
 .login-btn {
-  position: absolute;
-  width: 294px;
-  height: 70px;
-  left: 573px;
-  top: 639px;
+  width: 100%;
+  max-width: 300px;
+  height: 55px;
   background: #99CC00;
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translate(-372px, -164px);
+  margin: 1.5rem auto 0 auto;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.login-btn:hover {
+  background: #7fbf00;
 }
 .login-btn-text {
   font-weight: 700;
-  font-size: 48px;
-  line-height: 56px;
+  font-size: 2rem;
   color: #fff;
   text-align: center;
-  width: 268px;
-  height: 47px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* Botón Ir a Datos Médicos */
 .ir-datosmedicos-btn {
-  margin-top: 30px;
-  width: 220px;
+  margin-top: 2.5rem;
+  width: 80vw;
+  max-width: 220px;
   height: 45px;
   background: #009999;
   color: #fff;
   border: none;
   border-radius: 10px;
-  font-size: 18px;
+  font-size: 1rem;
   font-family: 'Roboto', sans-serif;
   cursor: pointer;
-  position: absolute;
-  left: 50%;
-  top: 750px;
-  transform: translate(-50%, 0);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 600px) {
+  .login-card {
+    padding: 1.5rem 1rem 2rem 1rem;
+    max-width: 98vw;
+  }
+  .login-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .login-btn {
+    height: 45px;
+    font-size: 1.2rem;
+  }
+  .login-btn-text {
+    font-size: 1.2rem;
+  }
 }
 </style>
