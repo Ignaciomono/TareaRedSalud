@@ -12,38 +12,41 @@
     </div>
     <!-- Card principal con detalle -->
     <div class="especialista-detalle-card-root">
-      <div v-if="especialistas.length > 0">
-        <div
-          class="especialista-detalle-card"
-          v-for="(especialista, idx) in especialistas"
-          :key="especialista.id"
-        >
-          <h2>Detalle Especialista {{ especialistas.length > 1 ? idx + 1 : '' }}</h2>
-          <div class="detalle-row"><span class="detalle-label">Nombre:</span> {{ especialista.nombre }}</div>
-          <div class="detalle-row"><span class="detalle-label">RUT:</span> {{ especialista.rut }}</div>
-          <div class="detalle-row"><span class="detalle-label">Especialidad:</span> {{ especialista.especialidad }}</div>
-          <div class="detalle-row" v-if="especialista.correo"><span class="detalle-label">Correo:</span> {{ especialista.correo }}</div>
-          <div class="detalle-row" v-if="especialista.telefono"><span class="detalle-label">Teléfono:</span> {{ especialista.telefono }}</div>
-          <div class="detalle-row" v-if="especialista.lunes"><span class="detalle-label">Lunes:</span> {{ especialista.lunes }}</div>
-          <div class="detalle-row" v-if="especialista.martes"><span class="detalle-label">Martes:</span> {{ especialista.martes }}</div>
-          <div class="detalle-row" v-if="especialista.miercoles"><span class="detalle-label">Miércoles:</span> {{ especialista.miercoles }}</div>
-          <div class="detalle-row" v-if="especialista.jueves"><span class="detalle-label">Jueves:</span> {{ especialista.jueves }}</div>
-          <div class="detalle-row" v-if="especialista.viernes"><span class="detalle-label">Viernes:</span> {{ especialista.viernes }}</div>
-          <div class="detalle-row" v-if="especialista.sabado"><span class="detalle-label">Sábado:</span> {{ especialista.sabado }}</div>
-          <div class="detalle-row" v-if="especialista.horario_lunes"><span class="detalle-label">Horario Lunes:</span> {{ especialista.horario_lunes }}</div>
-          <div class="detalle-row" v-if="especialista.horario_martes"><span class="detalle-label">Horario Martes:</span> {{ especialista.horario_martes }}</div>
-          <div class="detalle-row" v-if="especialista.horario_miercoles"><span class="detalle-label">Horario Miércoles:</span> {{ especialista.horario_miercoles }}</div>
-          <div class="detalle-row" v-if="especialista.horario_jueves"><span class="detalle-label">Horario Jueves:</span> {{ especialista.horario_jueves }}</div>
-          <div class="detalle-row" v-if="especialista.horario_viernes"><span class="detalle-label">Horario Viernes:</span> {{ especialista.horario_viernes }}</div>
-          <div class="detalle-row" v-if="especialista.horario_sabado"><span class="detalle-label">Horario Sábado:</span> {{ especialista.horario_sabado }}</div>
-          <div class="detalle-row" v-if="especialista.movimiento_agenda"><span class="detalle-label">Movimiento Agenda:</span> {{ especialista.movimiento_agenda }}</div>
-          <div class="detalle-row" v-if="especialista.pctes_semanales"><span class="detalle-label">Pacientes Semanales:</span> {{ especialista.pctes_semanales }}</div>
-          <div class="detalle-row" v-if="especialista.cantidad_horas"><span class="detalle-label">Cantidad Horas:</span> {{ especialista.cantidad_horas }}</div>
-          <div class="detalle-row" v-if="especialista.cantidad_minutos"><span class="detalle-label">Cantidad Minutos:</span> {{ especialista.cantidad_minutos }}</div>
-          <div class="detalle-row" v-if="especialista.dias_atencion"><span class="detalle-label">Días Atención:</span> {{ especialista.dias_atencion }}</div>
+      <div
+        class="especialista-detalle-card"
+        v-for="(especialista, idx) in especialistas"
+        :key="especialista.id"
+        v-if="especialistas.length > 0"
+      >
+        <h2>Detalle Especialista {{ especialistas.length > 1 ? idx + 1 : '' }}</h2>
+        <div class="detalle-row"><span class="detalle-label">Nombre:</span> {{ especialista.nombre }}</div>
+        <div class="detalle-row"><span class="detalle-label">RUT:</span> {{ especialista.rut }}</div>
+        <div class="detalle-row"><span class="detalle-label">Especialidad:</span> {{ especialista.especialidad }}</div>
+        <div class="detalle-row" v-if="especialista.proced_a_realizar">
+          <span class="detalle-label">Procedimiento a Realizar:</span> {{ especialista.proced_a_realizar }}
         </div>
+        
+        <div class="detalle-row" v-if="especialista.correo"><span class="detalle-label">Correo:</span> {{ especialista.correo }}</div>
+        <div class="detalle-row" v-if="especialista.telefono"><span class="detalle-label">Teléfono:</span> {{ especialista.telefono }}</div>
+        <div class="detalle-row" v-if="especialista.lunes"><span class="detalle-label">Lunes:</span> {{ especialista.lunes }}</div>
+        <div class="detalle-row" v-if="especialista.martes"><span class="detalle-label">Martes:</span> {{ especialista.martes }}</div>
+        <div class="detalle-row" v-if="especialista.miercoles"><span class="detalle-label">Miércoles:</span> {{ especialista.miercoles }}</div>
+        <div class="detalle-row" v-if="especialista.jueves"><span class="detalle-label">Jueves:</span> {{ especialista.jueves }}</div>
+        <div class="detalle-row" v-if="especialista.viernes"><span class="detalle-label">Viernes:</span> {{ especialista.viernes }}</div>
+        <div class="detalle-row" v-if="especialista.sabado"><span class="detalle-label">Sábado:</span> {{ especialista.sabado }}</div>
+        <div class="detalle-row" v-if="especialista.horario_lunes"><span class="detalle-label">Horario Lunes:</span> {{ especialista.horario_lunes }}</div>
+        <div class="detalle-row" v-if="especialista.horario_martes"><span class="detalle-label">Horario Martes:</span> {{ especialista.horario_martes }}</div>
+        <div class="detalle-row" v-if="especialista.horario_miercoles"><span class="detalle-label">Horario Miércoles:</span> {{ especialista.horario_miercoles }}</div>
+        <div class="detalle-row" v-if="especialista.horario_jueves"><span class="detalle-label">Horario Jueves:</span> {{ especialista.horario_jueves }}</div>
+        <div class="detalle-row" v-if="especialista.horario_viernes"><span class="detalle-label">Horario Viernes:</span> {{ especialista.horario_viernes }}</div>
+        <div class="detalle-row" v-if="especialista.horario_sabado"><span class="detalle-label">Horario Sábado:</span> {{ especialista.horario_sabado }}</div>
+        <div class="detalle-row" v-if="especialista.movimiento_agenda"><span class="detalle-label">Movimiento Agenda:</span> {{ especialista.movimiento_agenda }}</div>
+        <div class="detalle-row" v-if="especialista.pctes_semanales"><span class="detalle-label">Pacientes Semanales:</span> {{ especialista.pctes_semanales }}</div>
+        <div class="detalle-row" v-if="especialista.cantidad_horas"><span class="detalle-label">Cantidad Horas:</span> {{ especialista.cantidad_horas }}</div>
+        <div class="detalle-row" v-if="especialista.cantidad_minutos"><span class="detalle-label">Cantidad Minutos:</span> {{ especialista.cantidad_minutos }}</div>
+        <div class="detalle-row" v-if="especialista.dias_atencion"><span class="detalle-label">Días Atención:</span> {{ especialista.dias_atencion }}</div>
       </div>
-      <div v-else class="cargando">Cargando especialista...</div>
+      <div v-if="especialistas.length === 0" class="cargando">Cargando especialista...</div>
     </div>
   </div>
 </template>
