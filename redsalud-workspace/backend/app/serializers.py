@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import DatosMedicos
+from .models import DatosMedicos, Usuario
 
 class DatosMedicosSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +15,8 @@ class DatosMedicosSerializer(serializers.ModelSerializer):
             'jueves': {'required': False, 'allow_null': True},
             'sabado': {'required': False, 'allow_null': True},
         }
+
+class UsuarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = '__all__'

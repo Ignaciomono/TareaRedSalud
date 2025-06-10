@@ -6,7 +6,7 @@
 
       <!-- Usuario -->
       <div class="login-label usuario-label">Usuario</div>
-      <input class="login-input usuario-input" type="text" />
+      <input class="login-input usuario-input" type="text" v-model="rut" />
 
       <!-- Línea bajo usuario -->
       <div class="login-line line1"></div>
@@ -14,7 +14,7 @@
 
       <!-- Contraseña -->
       <div class="login-label password-label">Contraseña</div>
-      <input class="login-input password-input" type="password" />
+      <input class="login-input password-input" type="password" v-model="contraseña" />
 
       <!-- Línea bajo contraseña -->
       <div class="login-line line3"></div>
@@ -40,9 +40,35 @@
 <script>
 export default {
   name: 'Home',
+  data() {
+    return {
+      rut: '',
+      contraseña: ''
+    }
+  },
   methods: {
-    goToCoordinador() {
-      this.$router.push('/coordinador');
+    async goToCoordinador() {
+      // Llama al endpoint de usuarios
+      const response = await fetch('http://localhost:8000/usuarios/');
+      const usuarios = await response.json();
+      // Busca usuario por rut y contraseña
+      const usuario = usuarios.find(
+        u => u.rut === this.rut && u.contraseña === this.contraseña
+      );
+      if (usuario) {
+        // Guarda el nombre del usuario en localStorage
+        localStorage.setItem('nombreUsuario', usuario.nombre);
+        // Redirige según permisos
+        if (usuario.permisos === 'admin') {
+          this.$router.push('/admin');
+        } else if (usuario.permisos === 'coordinador') {
+          this.$router.push('/coordinador');
+        } else {
+          alert('Permiso no reconocido');
+        }
+      } else {
+        alert('RUT o contraseña incorrectos');
+      }
     }
   }
 }

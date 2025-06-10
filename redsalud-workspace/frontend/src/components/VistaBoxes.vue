@@ -4,7 +4,7 @@
     <div class="sidebar">
       <div class="profile-pic"></div>
       <div class="coordinador-nombre">Coordinador RedSalud<br />Rodolfo Estevia</div>
-      <div class="sidebar-btn">Especialistas</div>
+      <div class="sidebar-btn" @click="goToCoordinador">Especialistas</div>
       <div class="sidebar-btn">Boxes</div>
       <div class="sidebar-btn sidebar-btn-salir" @click="salir">Salir</div>
     </div>
@@ -24,7 +24,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(box, i) in boxes" :key="i">
+            <tr v-for="(box, i) in boxes" :key="i" >
               <td>{{ box.nombre }}</td>
               <td>{{ box.especialista }}</td>
               <td>{{ box.procedimiento }}</td>
@@ -57,6 +57,9 @@ export default {
     },
     goToAgregarBoxes() {
       this.$router.push('/agregar-boxes');
+    },
+    goToCoordinador() {
+      this.$router.push('/coordinador');
     }
   }
 }

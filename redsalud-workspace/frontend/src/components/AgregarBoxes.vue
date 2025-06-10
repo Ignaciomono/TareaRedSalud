@@ -4,8 +4,8 @@
     <div class="sidebar">
       <div class="profile-pic"></div>
       <div class="coordinador-nombre">Coordinador RedSalud<br />Rodolfo Estevia</div>
-      <div class="sidebar-btn">Especialistas</div>
-      <div class="sidebar-btn">Boxes</div>
+      <div class="sidebar-btn" @click="goToCoordinador">Especialistas</div>
+      <div class="sidebar-btn" @click="goToBoxes">Boxes</div>
       <div class="sidebar-btn sidebar-btn-salir" @click="salir">Salir</div>
     </div>
     <!-- Card principal -->
@@ -35,7 +35,7 @@
               </option>
             </select>
           </div>
-          <button class="asignar-btn" type="button" @click="asignar">Asignar</button>
+          <button class="asignar-btn" type="button">Asignar</button>
         </form>
       </div>
     </div>
@@ -54,12 +54,20 @@ export default {
         { nombre: 'Dr. Soto', procedimiento: 'Control Post operatorio' },
         { nombre: 'Dra. Ruiz', procedimiento: 'Consulta médica' },
         { nombre: 'Dr. Díaz', procedimiento: 'Ecografía Obstétrica' }
-      ]
+      ],
+      boxSeleccionado: '',
+      especialistaSeleccionado: ''
     }
   },
   methods: {
     salir() {
       this.$router.push('/');
+    },
+    goToCoordinador() {
+      this.$router.push('/coordinador');
+    },
+    goToBoxes() {
+      this.$router.push('/boxes');
     },
     generarBoxes() {
       const boxes = [];
@@ -70,7 +78,7 @@ export default {
         }
       }
       return boxes;
-    }
+    },
   }
 }
 </script>

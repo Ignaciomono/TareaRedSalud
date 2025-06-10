@@ -37,3 +37,14 @@ class DatosMedicos(models.Model):
     class Meta:
         managed = False  # Si la tabla ya existe y fue creada fuera de Django
         db_table = 'datos_medicos'
+
+class Usuario(models.Model):
+    id = models.AutoField(primary_key=True)
+    rut = models.TextField()
+    nombre = models.TextField()
+    contraseña = models.TextField()
+    permisos = models.TextField()
+
+    class Meta:
+        managed = False  # Si la tabla ya existe y fue creada fuera de Django
+        db_table = 'usuarios'

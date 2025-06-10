@@ -5,7 +5,7 @@ import OlvideContraseña from './components/OlvideContraseña.vue'
 import Coordinador from './components/Coordinador.vue'
 import VistaBoxes from './components/VistaBoxes.vue'
 import AgregarBoxes from './components/AgregarBoxes.vue'
-// Importing components for routing
+import VistaEspecialista from './components/VistaEspecialista.vue'
 
 
 const routes = [
@@ -14,7 +14,8 @@ const routes = [
   { path: '/olvide-contraseña', component: OlvideContraseña },
   { path: '/coordinador', component: Coordinador },
   { path: '/boxes', component: VistaBoxes },
-  { path: '/agregar-boxes', component: AgregarBoxes }
+  { path: '/agregar-boxes', component: AgregarBoxes },
+  { path: '/vista-especialista', component: VistaEspecialista }
 ]
 
 const router = createRouter({
