@@ -33,11 +33,56 @@ Backend en Django para la gestión de datos médicos.
 
 ## Endpoints principales
 
+### Datos Médicos
 - `GET /datos_medicos/` — Lista todos los datos médicos
 - `POST /datos_medicos/` — Crea un nuevo dato médico
 - `GET /datos_medicos/<id>/` — Obtiene un dato médico específico
 - `PUT /datos_medicos/<id>/` — Actualiza un dato médico
 - `DELETE /datos_medicos/<id>/` — Elimina un dato médico
+
+### Usuarios
+- `GET /usuarios/` — Lista todos los usuarios
+- `POST /usuarios/` — Crea un nuevo usuario
+- `GET /usuarios/<id>/` — Obtiene un usuario específico
+- `PUT /usuarios/<id>/` — Actualiza un usuario
+- `DELETE /usuarios/<id>/` — Elimina un usuario
+
+### Login
+- `POST /login/` — Login de usuario (requiere `rut` y `contraseña`)
+
+### Boxes
+- `GET /boxes/` — Lista todos los boxes
+- `POST /boxes/` — Crea un nuevo box
+- `GET /boxes/<id>/` — Obtiene un box específico
+- `PUT /boxes/<id>/` — Actualiza un box
+- `DELETE /boxes/<id>/` — Elimina un box
+
+---
+
+## Funcionalidades de gestión de reservas
+
+Se han agregado dos comandos de administración para poblar y vaciar reservas de boxes según los datos médicos:
+
+### Poblar reservas automáticamente
+
+Llena el campo `reservas` de cada box con los horarios de atención de los médicos.
+
+```sh
+python manage.py poblar_reservas
+```
+- Extrae los horarios desde los campos de cada médico.
+- Soporta múltiples horarios en una misma celda.
+- Si el box no existe, lo reporta en consola.
+
+### Vaciar todas las reservas
+
+Limpia el campo `reservas` de todos los boxes.
+
+```sh
+python manage.py vaciar_reservas
+```
+
+---
 
 ## CORS
 
