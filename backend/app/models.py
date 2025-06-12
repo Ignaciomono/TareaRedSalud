@@ -35,7 +35,7 @@ class DatosMedicos(models.Model):
     telefono = models.TextField()
 
     class Meta:
-        managed = False  # Si la tabla ya existe y fue creada fuera de Django
+        managed = False
         db_table = 'datos_medicos'
 
 class Usuario(models.Model):
@@ -46,14 +46,14 @@ class Usuario(models.Model):
     permisos = models.TextField()
 
     class Meta:
-        managed = False  # Si la tabla ya existe y fue creada fuera de Django
+        managed = False
         db_table = 'usuarios'
 
 class Box(models.Model):
-    codigo = models.CharField(primary_key=True, max_length=20)
-    nombre = models.CharField(max_length=100)
-    reservas = models.JSONField()  # Django 4+ soporta JSONField para PostgreSQL arrays
+    codigo = models.TextField()
+    nombre = models.TextField()
+    reservas = models.TextField()
 
     class Meta:
-        managed = False  # La tabla ya existe, no la maneja Django
+        managed = False
         db_table = 'box'
