@@ -50,10 +50,10 @@ class Usuario(models.Model):
         db_table = 'usuarios'
 
 class Box(models.Model):
-    codigo = models.TextField()
+    codigo = models.CharField(primary_key=True, max_length=20)
     nombre = models.TextField()
-    reservas = models.TextField()
+    reservas = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = False  # Django no crea ni modifica la tabla
         db_table = 'box'
