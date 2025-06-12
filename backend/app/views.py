@@ -3,8 +3,10 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import DatosMedicos, Usuario
-from .serializers import DatosMedicosSerializer, UsuarioSerializer
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from .models import DatosMedicos, Usuario, Box
+from .serializers import DatosMedicosSerializer, UsuarioSerializer, BoxSerializer
 
 def index(request):
     return HttpResponse("Bienvenido a RedSalud")
@@ -73,4 +75,52 @@ def detalle_usuario(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         usuario.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+@csrf_exempt
+@api_view(['POST'])
+def login_usuario(request):
+    rut = request.data.get('rut')
+    contraseña = request.data.get('contraseña')
+    try:
+        usuario = Usuario.objects.get(rut=rut)
+        if usuario.contraseña == contraseña:
+            # Aquí podrías generar un token, por simplicidad solo retorna éxito
+            return Response({'mensaje': 'Login exitoso', 'usuario_id': usuario.id})
+        else:
+            return Response({'error': 'Contraseña incorrecta'}, status=400)
+    except Usuario.DoesNotExist:
+        return Response({'error': 'Usuario no encontrado'}, status=404)
+
+@api_view(['GET', 'POST'])
+def lista_crea_boxes(request):
+    if request.method == 'GET':
+        boxes = Box.objects.all()
+        serializer = BoxSerializer(boxes, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = BoxSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def detalle_box(request, pk):
+    try:
+        box = Box.objects.get(pk=pk)
+    except Box.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = BoxSerializer(box)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = BoxSerializer(box, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        box.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

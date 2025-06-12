@@ -5,7 +5,7 @@
       <div class="login-title">Iniciar Sesión</div>
 
       <!-- Usuario -->
-      <div class="login-label usuario-label">Usuario</div>
+      <div class="login-label usuario-label">Rut del Usuario</div>
       <input class="login-input usuario-input" type="text" v-model="rut" />
 
       <!-- Línea bajo usuario -->
@@ -48,26 +48,26 @@ export default {
   },
   methods: {
     async goToCoordinador() {
-      // Llama al endpoint de usuarios
-      const response = await fetch('http://localhost:8000/usuarios/');
-      const usuarios = await response.json();
-      // Busca usuario por rut y contraseña
-      const usuario = usuarios.find(
-        u => u.rut === this.rut && u.contraseña === this.contraseña
-      );
-      if (usuario) {
-        // Guarda el nombre del usuario en localStorage
-        localStorage.setItem('nombreUsuario', usuario.nombre);
-        // Redirige según permisos
-        if (usuario.permisos === 'admin') {
-          this.$router.push('/admin');
-        } else if (usuario.permisos === 'coordinador') {
+      try {
+        const response = await fetch('http://localhost:8000/login/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            rut: this.rut,
+            contraseña: this.contraseña
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('nombreUsuario', data.nombre || '');
           this.$router.push('/coordinador');
         } else {
-          alert('Permiso no reconocido');
+          alert(data.error || 'RUT o contraseña incorrectos');
         }
-      } else {
-        alert('RUT o contraseña incorrectos');
+      } catch (error) {
+        alert('Error de conexión con el servidor');
       }
     }
   }

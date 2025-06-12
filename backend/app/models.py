@@ -48,3 +48,12 @@ class Usuario(models.Model):
     class Meta:
         managed = False  # Si la tabla ya existe y fue creada fuera de Django
         db_table = 'usuarios'
+
+class Box(models.Model):
+    codigo = models.CharField(primary_key=True, max_length=20)
+    nombre = models.CharField(max_length=100)
+    reservas = models.JSONField()  # Django 4+ soporta JSONField para PostgreSQL arrays
+
+    class Meta:
+        managed = False  # La tabla ya existe, no la maneja Django
+        db_table = 'box'
