@@ -11,6 +11,7 @@ DIAS = [
     ('horario_miercoles', 'Miércoles'),
     ('horario_jueves', 'Jueves'),
     ('horario_viernes', 'Viernes'),
+    ('horario_sabado', 'Sábado'),  # <-- Agregado sábado
 ]
 
 def extraer_reserva(horario_str):

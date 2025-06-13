@@ -1,37 +1,48 @@
 <!-- VistaCoordinadorBoxes.vue -->
 <template>
   <div class="boxes-main">
+    <!-- Sidebar -->
     <div class="sidebar">
       <div class="profile-pic"></div>
-      <div class="coordinador-nombre">Coordinador RedSalud<br />Rodolfo Estevia</div>
+      <div class="coordinador-nombre">
+        Coordinador RedSalud<br />{{ nombreUsuario }}
+      </div>
       <div class="sidebar-btn" @click="goToCoordinador">Especialistas</div>
       <div class="sidebar-btn">Boxes</div>
       <div class="sidebar-btn sidebar-btn-salir" @click="salir">Salir</div>
     </div>
-    <div class="boxes-root">
+    <!-- Card principal con listado de boxes -->
+    <div class="boxes-card-root">
       <div class="boxes-card">
-        <div class="boxes-header">
-          <h2>Gestión de Boxes</h2>
-          <button class="add-btn" @click="goToAgregarBoxes">Añadir</button>
+        <h2>Gestión de Boxes</h2>
+        <div class="piso-selector">
+          <label for="piso">Selecciona un piso:</label>
+          <select id="piso" v-model="pisoSeleccionado">
+            <option v-for="piso in pisosDisponibles" :key="piso" :value="piso">
+              Piso {{ piso }}
+            </option>
+          </select>
         </div>
-        <table class="boxes-table">
-          <thead>
-            <tr>
-              <th>Box</th>
-              <th>Especialista</th>
-              <th>Procedimiento</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(box, i) in boxes" :key="i" >
-              <td>{{ box.nombre }}</td>
-              <td>{{ box.especialista }}</td>
-              <td>{{ box.procedimiento }}</td>
-              <td><button class="edit-btn">Editar</button></td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-if="cargando" class="cargando">Cargando boxes...</div>
+        <div v-else-if="error" class="cargando" style="color:red;">{{ error }}</div>
+        <div v-else class="boxes-list">
+          <div
+            class="box-detalle-card"
+            v-for="box in boxesFiltrados"
+            :key="box.codigo"
+          >
+            <div class="box-detalle-header">
+              <span class="detalle-label">Código:</span>
+              <span class="detalle-codigo">{{ box.codigo }}</span>
+            </div>
+            <div class="box-detalle-nombre">
+              <span class="detalle-label">Nombre:</span>
+              <span class="detalle-nombre">{{ box.nombre }}</span>
+            </div>
+            <button class="edit-btn" @click="goToHorario(box)">Ver Horario</button>
+          </div>
+          <div v-if="boxesFiltrados.length === 0" class="cargando">No hay boxes para este piso.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -42,35 +53,77 @@ export default {
   name: 'VistaBoxes',
   data() {
     return {
-      boxes: [
-        { nombre: 'Box 1', especialista: 'Dr. Pérez', procedimiento: 'Consulta médica' },
-        { nombre: 'Box 2', especialista: 'Dra. López', procedimiento: 'Ecografía Obstétrica' },
-        { nombre: 'Box 3', especialista: 'Dr. Soto', procedimiento: 'Control Post operatorio' },
-        { nombre: 'Box 4', especialista: 'Dra. Ruiz', procedimiento: 'Consulta médica' },
-        { nombre: 'Box 5', especialista: 'Dr. Díaz', procedimiento: 'Ecografía Obstétrica' }
-      ]
+      nombreUsuario: '',
+      boxes: [],
+      pisosDisponibles: [4, 5, 6, 7, 8, 9, 10, 12, 13],
+      pisoSeleccionado: 4,
+      cargando: false,
+      error: null,
+    }
+  },
+  computed: {
+    boxesFiltrados() {
+      // Filtra por piso y luego ordena de menor a mayor por código numérico
+      return this.boxes
+        .filter(box => {
+          const codigo = box.codigo ? box.codigo.toString() : '';
+          const piso = this.pisoSeleccionado.toString();
+          if (['10', '12', '13'].includes(piso)) {
+            return codigo.startsWith(piso);
+          }
+          return codigo.startsWith(piso);
+        })
+        .sort((a, b) => {
+          // Ordenar de menor a mayor por código numérico
+          const codA = parseInt(a.codigo, 10);
+          const codB = parseInt(b.codigo, 10);
+          return codA - codB;
+        });
     }
   },
   methods: {
     salir() {
       this.$router.push('/');
     },
-    goToAgregarBoxes() {
-      this.$router.push('/agregar-boxes');
-    },
     goToCoordinador() {
       this.$router.push('/coordinador');
+    },
+    goToHorario(box) {
+      this.$router.push({ path: '/horario', query: { codigo: box.codigo, nombre: box.nombre } });
+    },
+    async cargarBoxes() {
+      this.cargando = true;
+      this.error = null;
+      try {
+        const url = 'http://localhost:8000/boxes/';
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Error al cargar boxes');
+        const data = await response.json();
+        this.boxes = Array.isArray(data) ? data : [];
+      } catch (e) {
+        this.error = e.message || 'Error de red';
+      } finally {
+        this.cargando = false;
+      }
     }
+  },
+  created() {
+    this.nombreUsuario = localStorage.getItem('nombreUsuario') || 'Usuario';
+    this.cargarBoxes();
   }
 }
 </script>
 
 <style scoped>
 .boxes-main {
-  display: flex;
   width: 100vw;
   height: 100vh;
-  background: #00a9ad;
+  background: #009999;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* Sidebar */
@@ -81,17 +134,18 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-top: 0;
   box-sizing: border-box;
-  padding-top: 38px;
   position: relative;
 }
 
 .profile-pic {
-  width: 200px;
-  height: 200px;
+  width: 120px;
+  height: 120px;
   background: #D9D9D9 url('https://via.placeholder.com/200') center/cover no-repeat;
   border-radius: 50%;
   border: 2px solid #bbb;
+  margin-top: 38px;
   margin-bottom: 10px;
 }
 
@@ -110,12 +164,12 @@ export default {
 
 .sidebar-btn {
   width: 90%;
-  height: 56px;
+  height: 48px;
   margin: 10px 0;
   border-radius: 12px;
   font-weight: 500;
-  font-size: 28px;
-  line-height: 42px;
+  font-size: 20px;
+  line-height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,107 +189,133 @@ export default {
   background: #ff3333;
 }
 
-/* Boxes content */
-.boxes-root {
+/* Card principal */
+.boxes-card-root {
   flex: 1;
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
   justify-content: center;
+  gap: 24px;
+  padding: 40px 0;
+  width: 100%;
 }
 
 .boxes-card {
   background: #fff;
-  border-radius: 14px;
+  border-radius: 18px;
   padding: 2.5rem 2.5rem 2rem 2.5rem;
-  min-width: 600px;
-  max-width: 900px;
-  width: 100%;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-}
-
-.boxes-header {
+  min-width: 0;
+  width: 98%;
+  max-width: 600px;
+  margin: 2vh auto 0 auto;
+  box-shadow: 0 2px 18px rgba(0,0,0,0.08);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  height: auto;
+}
+
+.boxes-card h2 {
   margin-bottom: 1.5rem;
-}
-
-.boxes-header h2 {
-  margin: 0;
-  font-size: 2.2rem;
+  font-size: 2.3rem;
   font-weight: 500;
-}
-
-.add-btn {
-  background: #75C2A6;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 1.3rem;
-  padding: 0.6rem 2.2rem;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-.add-btn:hover {
-  background: #009999;
-}
-
-.boxes-table {
+  color: #009999;
+  text-align: center;
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: #e5e5e5;
-  border-radius: 10px;
-  overflow: hidden;
 }
 
-.boxes-table th, .boxes-table td {
-  padding: 1rem 1.2rem;
-  font-size: 1.5rem;
-  text-align: left;
+.piso-selector {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.boxes-table thead th {
-  background: #75C2A6;
-  color: #222;
+.piso-selector label {
+  font-size: 1.2rem;
   font-weight: 500;
-  border: none;
 }
 
-.boxes-table tbody tr {
-  border-top: 1px solid #bbb;
+.piso-selector select {
+  font-size: 1.2rem;
+  padding: 0.3rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #bbb;
 }
 
-.boxes-table tbody tr:last-child td {
-  border-bottom: none;
+/* SCROLLABLE LISTA DE BOXES */
+.boxes-list {
+  width: 100%;
+  max-height: 420px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.box-detalle-card {
+  background: #f9f9f9;
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  padding: 1.2rem 1.5rem 1.2rem 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 80px;
+}
+
+.box-detalle-header, .box-detalle-nombre {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.detalle-label {
+  font-weight: 600;
+  color: #009999;
+  margin-right: 4px;
+  font-size: 1.08rem;
+}
+
+.detalle-codigo {
+  font-weight: 600;
+  color: #222;
+  font-size: 1.08rem;
+}
+
+.detalle-nombre {
+  color: #222;
+  font-size: 1.08rem;
 }
 
 .edit-btn {
-  background: transparent;
-  color: #222;
+  background: #75C2A6;
+  color: #fff;
   border: none;
-  font-size: 1.3rem;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  padding: 0.5rem 1.5rem;
   cursor: pointer;
   font-weight: 500;
-  transition: color 0.2s;
+  transition: background 0.2s;
+  min-width: 110px;
+  align-self: center;
+  margin-left: auto;
 }
 .edit-btn:hover {
-  color: #009999;
+  background: #009999;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-  .boxes-card {
-    min-width: 0;
-    padding: 1rem;
-  }
-  .boxes-table th, .boxes-table td {
-    font-size: 1rem;
-    padding: 0.5rem 0.7rem;
-  }
-  .boxes-header h2 {
-    font-size: 1.2rem;
-  }
+.cargando {
+  font-size: 1.2rem;
+  color: #009999;
+  text-align: center;
+  margin-top: 2rem;
 }
 </style>
