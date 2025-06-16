@@ -46,6 +46,7 @@
         <div class="leyenda">
           <div class="leyenda-block" style="background:#75C2A6"></div> Reserva
         </div>
+        <div v-if="!reservas.length" class="cargando">No hay reservas para este box.</div>
       </div>
     </div>
   </div>

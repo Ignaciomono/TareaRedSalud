@@ -6,7 +6,14 @@
 
       <!-- Usuario -->
       <div class="login-label usuario-label">Rut del Usuario</div>
-      <input class="login-input usuario-input" type="text" v-model="rut" />
+      <input
+        class="login-input usuario-input"
+        type="text"
+        v-model="rut"
+        autocomplete="username"
+        required
+        placeholder="Ingrese su RUT"
+      />
 
       <!-- Línea bajo usuario -->
       <div class="login-line line1"></div>
@@ -14,7 +21,14 @@
 
       <!-- Contraseña -->
       <div class="login-label password-label">Contraseña</div>
-      <input class="login-input password-input" type="password" v-model="contraseña" />
+      <input
+        class="login-input password-input"
+        type="password"
+        v-model="contraseña"
+        autocomplete="current-password"
+        required
+        placeholder="Ingrese su contraseña"
+      />
 
       <!-- Línea bajo contraseña -->
       <div class="login-line line3"></div>
@@ -24,10 +38,18 @@
       <div class="recordarme">Recordarme</div>
       <router-link to="/olvide-contraseña" class="olvide">Olvide mi contraseña</router-link>
 
+      <!-- Mensaje de error -->
+      <div v-if="error" class="login-error">{{ error }}</div>
+
       <!-- Botón LOGIN -->
-      <div class="login-btn" @click="goToCoordinador">
-        <span class="login-btn-text">LOGIN</span>
-      </div>
+      <button
+        class="login-btn"
+        :disabled="cargando"
+        @click="login"
+      >
+        <span v-if="!cargando" class="login-btn-text">LOGIN</span>
+        <span v-else class="login-btn-text">Cargando...</span>
+      </button>
 
       <!-- Botón para ir a Datos Médicos -->
       <router-link to="/datos-medicos">
@@ -43,11 +65,15 @@ export default {
   data() {
     return {
       rut: '',
-      contraseña: ''
+      contraseña: '',
+      cargando: false,
+      error: null
     }
   },
   methods: {
-    async goToCoordinador() {
+    async login() {
+      this.cargando = true;
+      this.error = null;
       try {
         const response = await fetch('http://localhost:8000/login/', {
           method: 'POST',
@@ -64,10 +90,12 @@ export default {
           localStorage.setItem('nombreUsuario', data.nombre || '');
           this.$router.push('/coordinador');
         } else {
-          alert(data.error || 'RUT o contraseña incorrectos');
+          this.error = data.error || 'RUT o contraseña incorrectos';
         }
       } catch (error) {
-        alert('Error de conexión con el servidor');
+        this.error = 'Error de conexión con el servidor';
+      } finally {
+        this.cargando = false;
       }
     }
   }
@@ -207,6 +235,14 @@ html, body {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.login-error {
+  color: red;
+  font-size: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+  width: 100%;
 }
 
 @media (max-width: 600px) {

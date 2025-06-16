@@ -2,7 +2,11 @@
   <div class="olvide-root">
     <div class="olvide-card">
       <!-- Flecha volver -->
-      <span class="arrow-left" @click="goHome">&#8592;</span>
+      <div class="arrow-left" @click="volver" aria-label="Volver" tabindex="0">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
       <!-- Título -->
       <div class="olvide-title">Olvide mi contraseña</div>
       <!-- Subtítulo -->
@@ -25,7 +29,7 @@
 export default {
   name: 'OlvideContraseña',
   methods: {
-    goHome() {
+    volver() {
       this.$router.push('/');
     }
   }
@@ -76,7 +80,7 @@ export default {
   font-weight: 700;
   font-size: 2rem;
   line-height: 2.5rem;
-  color: #85CCCC;
+  color: #009999;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
   text-align: center;

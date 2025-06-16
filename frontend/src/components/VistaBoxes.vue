@@ -8,7 +8,7 @@
         Coordinador RedSalud<br />{{ nombreUsuario }}
       </div>
       <div class="sidebar-btn" @click="goToCoordinador">Especialistas</div>
-      <div class="sidebar-btn">Boxes</div>
+      <div class="sidebar-btn sidebar-btn-activo">Boxes</div>
       <div class="sidebar-btn sidebar-btn-salir" @click="salir">Salir</div>
     </div>
     <!-- Card principal con listado de boxes -->
@@ -317,5 +317,11 @@ export default {
   color: #009999;
   text-align: center;
   margin-top: 2rem;
+}
+.sidebar-btn-activo {
+  background: #009999;
+  color: #fff;
+  pointer-events: none;
+  cursor: default;
 }
 </style>

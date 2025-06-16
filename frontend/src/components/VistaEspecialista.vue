@@ -164,6 +164,13 @@ export default {
   color: #000;
 }
 
+.sidebar-btn-activo {
+  background: #009999;
+  color: #fff;
+  pointer-events: none;
+  cursor: default;
+}
+
 .sidebar-btn-salir {
   background: #ff6666;
   color: #fff;

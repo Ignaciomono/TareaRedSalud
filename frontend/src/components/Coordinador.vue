@@ -6,8 +6,8 @@
       <div class="coordinador-nombre">
         Coordinador RedSalud<br />{{ nombreUsuario }}
       </div>
-      <div class="sidebar-btn sidebar-btn-especialistas">Especialistas</div>
-      <div class="sidebar-btn sidebar-btn-boxes" @click="goToBoxes">Boxes</div>
+      <div class="sidebar-btn sidebar-btn-activo">Especialistas</div>
+      <div class="sidebar-btn" @click="goToBoxes">Boxes</div>
       <div class="sidebar-btn sidebar-btn-salir" @click="salir">Salir</div>
     </div>
     <!-- Listado de especialistas a la derecha -->
@@ -135,8 +135,8 @@ export default {
 }
 
 .profile-pic {
-  width: 200px;
-  height: 200px;
+  width: 120px;
+  height: 120px;
   background: #D9D9D9 url('https://via.placeholder.com/200') center/cover no-repeat;
   border-radius: 50%;
   border: 2px solid #bbb;
@@ -159,24 +159,27 @@ export default {
 
 .sidebar-btn {
   width: 90%;
-  height: 56px;
+  height: 48px;
   margin: 10px 0;
   border-radius: 12px;
   font-weight: 500;
-  font-size: 28px;
-  line-height: 42px;
+  font-size: 20px;
+  line-height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  user-select: none;
-}
-
-.sidebar-btn-especialistas,
-.sidebar-btn-boxes {
   background: #75C2A6;
   color: #000;
+  user-select: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-btn-activo {
+  background: #009999;
+  color: #fff;
+  pointer-events: none;
+  cursor: default;
 }
 
 .sidebar-btn-salir {
@@ -185,7 +188,6 @@ export default {
   margin-top: auto;
   margin-bottom: 30px;
 }
-
 .sidebar-btn-salir:hover {
   background: #ff3333;
 }
