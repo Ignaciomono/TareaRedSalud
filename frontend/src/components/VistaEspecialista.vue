@@ -34,12 +34,48 @@
         <div class="detalle-row" v-if="especialista.jueves"><span class="detalle-label">Jueves:</span> {{ especialista.jueves }}</div>
         <div class="detalle-row" v-if="especialista.viernes"><span class="detalle-label">Viernes:</span> {{ especialista.viernes }}</div>
         <div class="detalle-row" v-if="especialista.sabado"><span class="detalle-label">Sábado:</span> {{ especialista.sabado }}</div>
-        <div class="detalle-row" v-if="especialista.horario_lunes"><span class="detalle-label">Horario Lunes:</span> {{ especialista.horario_lunes }}</div>
-        <div class="detalle-row" v-if="especialista.horario_martes"><span class="detalle-label">Horario Martes:</span> {{ especialista.horario_martes }}</div>
-        <div class="detalle-row" v-if="especialista.horario_miercoles"><span class="detalle-label">Horario Miércoles:</span> {{ especialista.horario_miercoles }}</div>
-        <div class="detalle-row" v-if="especialista.horario_jueves"><span class="detalle-label">Horario Jueves:</span> {{ especialista.horario_jueves }}</div>
-        <div class="detalle-row" v-if="especialista.horario_viernes"><span class="detalle-label">Horario Viernes:</span> {{ especialista.horario_viernes }}</div>
-        <div class="detalle-row" v-if="especialista.horario_sabado"><span class="detalle-label">Horario Sábado:</span> {{ especialista.horario_sabado }}</div>
+        <div class="detalle-row" v-if="especialista.horario_lunes">
+          <span class="detalle-label">Horario Lunes:</span>
+          <span v-for="(bloque, idx) in especialista.horario_lunes.split('  ')" :key="idx" class="bloque-horario">
+            {{ bloque }}
+            <button class="btn-eliminar" @click="eliminarBloque(especialista.id, 'Lunes', bloque)">🗑️</button>
+          </span>
+        </div>
+        <div class="detalle-row" v-if="especialista.horario_martes">
+          <span class="detalle-label">Horario Martes:</span>
+          <span v-for="(bloque, idx) in especialista.horario_martes.split('  ')" :key="idx" class="bloque-horario">
+            {{ bloque }}
+            <button class="btn-eliminar" @click="eliminarBloque(especialista.id, 'Martes', bloque)">🗑️</button>
+          </span>
+        </div>
+        <div class="detalle-row" v-if="especialista.horario_miercoles">
+          <span class="detalle-label">Horario Miércoles:</span>
+          <span v-for="(bloque, idx) in especialista.horario_miercoles.split('  ')" :key="idx" class="bloque-horario">
+            {{ bloque }}
+            <button class="btn-eliminar" @click="eliminarBloque(especialista.id, 'Miércoles', bloque)">🗑️</button>
+          </span>
+        </div>
+        <div class="detalle-row" v-if="especialista.horario_jueves">
+          <span class="detalle-label">Horario Jueves:</span>
+          <span v-for="(bloque, idx) in especialista.horario_jueves.split('  ')" :key="idx" class="bloque-horario">
+            {{ bloque }}
+            <button class="btn-eliminar" @click="eliminarBloque(especialista.id, 'Jueves', bloque)">🗑️</button>
+          </span>
+        </div>
+        <div class="detalle-row" v-if="especialista.horario_viernes">
+          <span class="detalle-label">Horario Viernes:</span>
+          <span v-for="(bloque, idx) in especialista.horario_viernes.split('  ')" :key="idx" class="bloque-horario">
+            {{ bloque }}
+            <button class="btn-eliminar" @click="eliminarBloque(especialista.id, 'Viernes', bloque)">🗑️</button>
+          </span>
+        </div>
+        <div class="detalle-row" v-if="especialista.horario_sabado">
+          <span class="detalle-label">Horario Sábado:</span>
+          <span v-for="(bloque, idx) in especialista.horario_sabado.split('  ')" :key="idx" class="bloque-horario">
+            {{ bloque }}
+            <button class="btn-eliminar" @click="eliminarBloque(especialista.id, 'Sábado', bloque)">🗑️</button>
+          </span>
+        </div>
         <div class="detalle-row" v-if="especialista.movimiento_agenda"><span class="detalle-label">Movimiento Agenda:</span> {{ especialista.movimiento_agenda }}</div>
         <div class="detalle-row" v-if="especialista.pctes_semanales"><span class="detalle-label">Pacientes Semanales:</span> {{ especialista.pctes_semanales }}</div>
         <div class="detalle-row" v-if="especialista.cantidad_horas"><span class="detalle-label">Cantidad Horas:</span> {{ especialista.cantidad_horas }}</div>
@@ -89,6 +125,28 @@ export default {
         this.especialistas = results.filter(e => e);
       } catch (e) {
         this.especialistas = [];
+      }
+    },
+    async eliminarBloque(especialistaId, dia, bloque) {
+      if (!confirm(`¿Eliminar el bloque "${bloque}" del día ${dia}?`)) return;
+      try {
+        const resp = await fetch('http://localhost:8000/eliminar_horario_especialista/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            especialista_id: especialistaId,
+            dia,
+            bloque
+          })
+        });
+        if (resp.ok) {
+          // Recarga los datos del especialista
+          this.cargarEspecialistas();
+        } else {
+          alert('No se pudo eliminar el bloque.');
+        }
+      } catch (e) {
+        alert('Error de conexión.');
       }
     }
   }
@@ -164,13 +222,6 @@ export default {
   color: #000;
 }
 
-.sidebar-btn-activo {
-  background: #009999;
-  color: #fff;
-  pointer-events: none;
-  cursor: default;
-}
-
 .sidebar-btn-salir {
   background: #ff6666;
   color: #fff;
@@ -234,5 +285,25 @@ export default {
   font-size: 1.2rem;
   color: #009999;
   text-align: center;
+}
+
+.bloque-horario {
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.btn-eliminar {
+  background: #ff6666;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  margin-left: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 2px 6px;
+}
+
+.btn-eliminar:hover {
+  background: #ff3333;
 }
 </style>

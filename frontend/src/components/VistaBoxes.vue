@@ -110,6 +110,11 @@ export default {
   created() {
     this.nombreUsuario = localStorage.getItem('nombreUsuario') || 'Usuario';
     this.cargarBoxes();
+  },
+  watch: {
+    '$route.query.recargar'(val) {
+      if (val) this.cargarBoxes();
+    }
   }
 }
 </script>

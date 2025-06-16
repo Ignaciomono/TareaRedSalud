@@ -10,4 +10,6 @@ urlpatterns = [
     path('login/', views.login_usuario, name='login_usuario'),
     path('boxes/', views.lista_crea_boxes, name='lista_crea_boxes'),
     path('boxes/<str:pk>/', views.detalle_box, name='detalle_box'),
+    path('reservar/', views.reservar, name='reservar'),
+    path('eliminar_horario_especialista/', views.eliminar_horario_especialista, name='eliminar_horario_especialista'),
 ]

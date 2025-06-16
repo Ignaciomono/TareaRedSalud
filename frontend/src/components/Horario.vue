@@ -14,6 +14,7 @@
     <div class="horario-card-root">
       <div class="horario-card">
         <h2>{{ titulo }}</h2>
+        <button v-if="!modoReserva" class="btn-reservar" @click="activarReserva">Reservar</button>
         <div class="horario-scroll">
           <table class="horario-table">
             <thead>
@@ -29,7 +30,9 @@
                   <td
                     v-if="!estaOcupada(dia, hora)"
                     :rowspan="getRowspan(dia, hora)"
-                    :class="getReservaClase(dia, hora)"
+                    :class="[getReservaClase(dia, hora), celdaSeleccionada(dia, hora) ? 'seleccionada' : '']"
+                    @click="seleccionarCelda(dia, hora)"
+                    :style="modoReserva && !getReserva(dia, hora) ? 'cursor:pointer' : ''"
                   >
                     <div v-if="getReserva(dia, hora)">
                       <span class="reserva-nombre">{{ getReserva(dia, hora).nombre }}</span>
@@ -43,6 +46,7 @@
             </tbody>
           </table>
         </div>
+        <button v-if="modoReserva" class="btn-ok" :disabled="!seleccion.length" @click="confirmarReserva">OK</button>
         <div class="leyenda">
           <div class="leyenda-block" style="background:#75C2A6"></div> Reserva
         </div>
@@ -80,6 +84,9 @@ export default {
       reservas: [],
       reservasMapa: {},
       cargando: true,
+      modoReserva: false,
+      seleccion: [],
+      boxInfo: {},
     };
   },
   created() {
@@ -87,6 +94,12 @@ export default {
     this.generarHoras();
     this.cargarReservas();
   },
+  watch: {
+  '$route'(to, from) {
+    // Siempre recarga reservas al entrar a la ruta
+    this.cargarReservas();
+  }
+},
   methods: {
     salir() {
       this.$router.push('/');
@@ -104,6 +117,23 @@ export default {
       }
       this.horas = horas;
     },
+    activarReserva() {
+      this.modoReserva = true;
+      this.seleccion = [];
+    },
+    seleccionarCelda(dia, hora) {
+      if (!this.modoReserva) return;
+      if (this.getReserva(dia, hora)) return;
+      const idx = this.seleccion.findIndex(sel => sel.dia === dia && sel.hora === hora);
+      if (idx >= 0) {
+        this.seleccion.splice(idx, 1);
+      } else {
+        this.seleccion.push({ dia, hora });
+      }
+    },
+    celdaSeleccionada(dia, hora) {
+      return this.seleccion.some(sel => sel.dia === dia && sel.hora === hora);
+    },
     async cargarReservas() {
       this.cargando = true;
       try {
@@ -113,6 +143,7 @@ export default {
         const data = await response.json();
         this.titulo = data.nombre || 'Horario del Box';
         this.reservas = this.parseReservasString(data.reservas || '');
+        this.boxInfo = data; // Guardar info completa del box
         if (!this.reservas.length) {
           this.titulo = 'No hay reservas para este box';
         }
@@ -122,6 +153,16 @@ export default {
       }
       this.prepararMapaReservas();
       this.cargando = false;
+    },
+    confirmarReserva() {
+      // Redirige a ConfirmarReserva.vue pasando la selección y el código del box
+      this.$router.push({
+        path: '/confirmar-reserva',
+        query: {
+          seleccion: JSON.stringify(this.seleccion),
+          codigo: this.boxInfo.codigo
+        }
+      });
     },
     parseReservasString(reservasStr) {
       if (!reservasStr) return [];
@@ -203,7 +244,29 @@ export default {
     },
     getReservaClase(dia, hora) {
       return this.getReserva(dia, hora) ? 'reserva-block' : '';
-    }
+    },
+    getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    },
+    sumarIntervalo(hora, minutos) {
+      const [h, m] = hora.split(':').map(Number);
+      const total = h * 60 + m + minutos;
+      const nh = Math.floor(total / 60);
+      const nm = total % 60;
+      return `${nh.toString().padStart(2, '0')}:${nm.toString().padStart(2, '0')}`;
+    },
   }
 };
 </script>
@@ -384,5 +447,40 @@ export default {
   color: #009999;
   text-align: center;
   margin-top: 2rem;
+}
+.btn-reservar {
+  background: #009999;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7em 2em;
+  font-size: 1.2em;
+  margin-bottom: 1.2em;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.btn-reservar:hover {
+  background: #007777;
+}
+.btn-ok {
+  background: #75C2A6;
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7em 2em;
+  font-size: 1.2em;
+  margin-top: 1.2em;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.btn-ok:hover {
+  background: #009999;
+  color: #fff;
+}
+.seleccionada {
+  outline: 3px solid #009999;
+  background: #e0f7f4 !important;
 }
 </style>
